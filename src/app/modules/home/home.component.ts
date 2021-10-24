@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { WeatherData } from "../../models/weather-data";
 import { LocalStorageService } from "../../services/local-storage/local-storage.service";
 import { WeatherApiService } from "../../services/weather-api/weather-api.service";
+import { getIcon } from "../../helpers/get-icon";
 
 @Component({
     selector: "app-home",
@@ -12,6 +13,7 @@ import { WeatherApiService } from "../../services/weather-api/weather-api.servic
 export class HomeComponent implements OnInit {
     public form: FormGroup;
     public zipCodesData: WeatherData[] = [];
+    public getIcon: (zipCodeData: WeatherData) => string = getIcon;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -45,24 +47,5 @@ export class HomeComponent implements OnInit {
     public async removeZipCode(zipCodeData: WeatherData, index: number): Promise<void> {
         this.localStorageService.removeZipCode(zipCodeData.zipCode);
         this.zipCodesData.splice(index, 1);
-    }
-
-    public getIcon(zipCodeData: WeatherData): string {
-        const weatherId: number = zipCodeData.weather[0].id;
-        if (weatherId === 800) {
-            return "sun";
-        } else if (weatherId >= 200 && weatherId <= 232) {
-            return "clouds";
-        } else if (weatherId >= 300 && weatherId <= 321) {
-            return "rain";
-        } else if (weatherId >= 500 && weatherId <= 531) {
-            return "rain";
-        } else if (weatherId >= 600 && weatherId <= 622) {
-            return "snow";
-        } else if (weatherId >= 701 && weatherId <= 781) {
-            return "clouds";
-        } else if (weatherId >= 801 && weatherId <= 804) {
-            return "clouds";
-        }
     }
 }

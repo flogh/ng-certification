@@ -18,7 +18,9 @@
                     {{ zipCodeData.main.temp_min }}
                 </p>
                 <p>
-                    <a routerLink="/forecast/{{ zipCodeData.id }}">Show 5-day forecast for {{ zipCodeData.name }}</a>
+                    <a routerLink="/forecast/{{ zipCodeData.zipCode }}"
+                        >Show 5-day forecast for {{ zipCodeData.name }}</a
+                    >
                 </p>
             </div>
             <div>

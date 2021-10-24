@@ -36,4 +36,8 @@ export interface WeatherData {
         deg: number;
     };
     zipCode: string;
+    temp: {
+        min: number;
+        max: number;
+    };
 }
