@@ -8,20 +8,23 @@
             Add location
         </button>
     </div>
-    <div>
+    <div *ngFor="let zipCodeData of zipCodesData; let i = index">
         <div class="well flex">
             <div>
-                <h3>Rancho Cordova (95742)</h3>
-                <h4>Current conditions: Clouds</h4>
+                <h3>{{ zipCodeData.name }} ({{ zipCodeData.zipCode }})</h3>
+                <h4>Current conditions: {{ zipCodeData.weather[0].main }}</h4>
                 <h4>Temperatures today:</h4>
-                <p>Current 58 - Max 65 - Min 48</p>
                 <p>
-                    <a href="/forecast/95742">Show 5-day forecast for Rancho Cordova</a>
+                    Current {{ zipCodeData.main.temp }} - Max {{ zipCodeData.main.temp_max }} - Min
+                    {{ zipCodeData.main.temp_min }}
+                </p>
+                <p>
+                    <a href="/forecast/95742">Show 5-day forecast for {{ zipCodeData.name }}</a>
                 </p>
             </div>
             <div>
-                <span class="close">×</span>
-                <img src="https://www.angulartraining.com/images/weather/sun.png" />
+                <span class="close" (click)="removeZipCode(zipCodeData, i)">×</span>
+                <img src="https://www.angulartraining.com/images/weather/{{ getIcon(zipCodeData) }}.png" />
             </div>
         </div>
     </div>

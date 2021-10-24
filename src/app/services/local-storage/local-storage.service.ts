@@ -10,4 +10,15 @@ export class LocalStorageService {
         localStorage.setItem("zipCodes", JSON.stringify(zipCodes));
         return;
     }
+
+    public removeZipCode(zipCode: string): void {
+        let zipCodes: string[] = JSON.parse(localStorage.getItem("zipCodes")) || [];
+        zipCodes = zipCodes.filter((zip) => zip !== zipCode);
+        localStorage.setItem("zipCodes", JSON.stringify(zipCodes));
+        return;
+    }
+
+    public getZipeCodes(): string[] {
+        return JSON.parse(localStorage.getItem("zipCodes")) || [];
+    }
 }
