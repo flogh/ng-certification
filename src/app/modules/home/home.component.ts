@@ -4,15 +4,19 @@ import { WeatherData } from "../../models/weather-data";
 import { LocalStorageService } from "../../services/local-storage/local-storage.service";
 import { WeatherApiService } from "../../services/weather-api/weather-api.service";
 import { getIcon } from "../../helpers/get-icon";
-import { interval, Observable } from "rxjs";
+import { interval } from "rxjs";
+import { Store } from "@ngxs/store";
+import { ButtonActionCompleted, ButtonDefault, ButtonWorking } from "../../components/button/button.actions";
 
 @Component({
     selector: "app-home",
     templateUrl: "./home.component.html",
-    styleUrls: ["./home.component.css"],
+    styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-    public form: FormGroup;
+    public form: FormGroup = this.formBuilder.group({
+        zipCode: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
+    });
     public zipCodesData: WeatherData[];
     public wait: boolean;
     public getIcon: (zipCodeData: WeatherData) => string = getIcon;
@@ -21,12 +25,10 @@ export class HomeComponent implements OnInit {
         private formBuilder: FormBuilder,
         private localStorageService: LocalStorageService,
         private weatherApiService: WeatherApiService,
+        private store: Store,
     ) {}
 
     public async ngOnInit(): Promise<void> {
-        this.form = this.formBuilder.group({
-            zipCode: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-        });
         this.getInitData();
         interval(30000).subscribe(async () => this.getInitData());
     }
@@ -51,7 +53,10 @@ export class HomeComponent implements OnInit {
             zipCodeData.zipCode = this.form.value.zipCode;
             this.zipCodesData.push(zipCodeData);
             this.form.controls.zipCode.setValue("");
-        } catch (e) {}
+            this.store.dispatch(new ButtonActionCompleted());
+        } catch (e) {
+            this.store.dispatch(new ButtonDefault());
+        }
     }
 
     public async removeZipCode(zipCodeData: WeatherData, index: number): Promise<void> {

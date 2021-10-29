@@ -1,0 +1,11 @@
+<ng-container [ngSwitch]="state$ | async">
+    <ng-container *ngSwitchCase="ButtonStateEnum.DEFAULT">
+        <ng-container *ngTemplateOutlet="templateDefault"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="ButtonStateEnum.WORKING">
+        <ng-container *ngTemplateOutlet="templateWorking"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="ButtonStateEnum.DONE">
+        <ng-container *ngTemplateOutlet="templateDone"></ng-container>
+    </ng-container>
+</ng-container>
