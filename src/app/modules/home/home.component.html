@@ -7,27 +7,30 @@
             Add location
         </button>
     </div>
-    <div *ngFor="let zipCodeData of zipCodesData; let i = index">
-        <div class="well flex">
-            <div>
-                <h3>{{ zipCodeData.name }} ({{ zipCodeData.zipCode }})</h3>
-                <h4>Current conditions: {{ zipCodeData.weather[0].main }}</h4>
-                <h4>Temperatures today:</h4>
-                <p>
-                    Current {{ zipCodeData.main.temp }} - Max {{ zipCodeData.main.temp_max }} - Min
-                    {{ zipCodeData.main.temp_min }}
-                </p>
-                <p>
-                    <a routerLink="/forecast/{{ zipCodeData.zipCode }}"
-                        >Show 5-day forecast for {{ zipCodeData.name }}</a
-                    >
-                </p>
-            </div>
-            <div>
-                <span class="close" (click)="removeZipCode(zipCodeData, i)">×</span>
-                <img src="https://www.angulartraining.com/images/weather/{{ getIcon(zipCodeData) }}.png" />
+    <app-loading *ngIf="wait" margin="40px 0"></app-loading>
+    <ng-container *ngIf="!wait">
+        <div *ngFor="let zipCodeData of zipCodesData; let i = index">
+            <div class="well flex">
+                <div>
+                    <h3>{{ zipCodeData.name }} ({{ zipCodeData.zipCode }})</h3>
+                    <h4>Current conditions: {{ zipCodeData.weather[0].main }}</h4>
+                    <h4>Temperatures today:</h4>
+                    <p>
+                        Current {{ zipCodeData.main.temp }} - Max {{ zipCodeData.main.temp_max }} - Min
+                        {{ zipCodeData.main.temp_min }}
+                    </p>
+                    <p>
+                        <a routerLink="/forecast/{{ zipCodeData.zipCode }}"
+                            >Show 5-day forecast for {{ zipCodeData.name }}</a
+                        >
+                    </p>
+                </div>
+                <div>
+                    <span class="close" (click)="removeZipCode(zipCodeData, i)">×</span>
+                    <img src="https://www.angulartraining.com/images/weather/{{ getIcon(zipCodeData) }}.png" />
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </div>
 <hr />

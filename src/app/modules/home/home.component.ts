@@ -4,6 +4,7 @@ import { WeatherData } from "../../models/weather-data";
 import { LocalStorageService } from "../../services/local-storage/local-storage.service";
 import { WeatherApiService } from "../../services/weather-api/weather-api.service";
 import { getIcon } from "../../helpers/get-icon";
+import { interval, Observable } from "rxjs";
 
 @Component({
     selector: "app-home",
@@ -12,7 +13,8 @@ import { getIcon } from "../../helpers/get-icon";
 })
 export class HomeComponent implements OnInit {
     public form: FormGroup;
-    public zipCodesData: WeatherData[] = [];
+    public zipCodesData: WeatherData[];
+    public wait: boolean;
     public getIcon: (zipCodeData: WeatherData) => string = getIcon;
 
     constructor(
@@ -25,6 +27,13 @@ export class HomeComponent implements OnInit {
         this.form = this.formBuilder.group({
             zipCode: ["", [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
         });
+        this.getInitData();
+        interval(30000).subscribe(async () => this.getInitData());
+    }
+
+    private async getInitData(): Promise<void> {
+        this.wait = true;
+        this.zipCodesData = [];
         for await (const zipCode of this.localStorageService.getZipeCodes()) {
             try {
                 const zipCodeData: WeatherData = await this.weatherApiService.getData(zipCode).toPromise();
@@ -32,6 +41,7 @@ export class HomeComponent implements OnInit {
                 this.zipCodesData.push(zipCodeData);
             } catch (e) {}
         }
+        this.wait = false;
     }
 
     public async addZipCode(): Promise<void> {
