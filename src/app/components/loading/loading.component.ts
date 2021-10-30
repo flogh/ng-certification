@@ -7,5 +7,4 @@ import { Component, Input } from "@angular/core";
 })
 export class LoadingComponent {
     @Input() public small: boolean;
-    @Input() public margin: string;
 }

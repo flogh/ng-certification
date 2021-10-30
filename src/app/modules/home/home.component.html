@@ -19,13 +19,13 @@
             <button class="btn btn-primary" (click)="addZipCode()">Add location</button>
         </ng-template>
         <ng-template #buttonWorking>
-            <button class="btn btn-warning">Adding...</button>
+            <button class="btn btn-warning" disabled>Adding...</button>
         </ng-template>
         <ng-template #buttonDone>
-            <button class="btn btn-success">Done</button>
+            <button class="btn btn-success" disabled>Done</button>
         </ng-template>
     </div>
-    <app-loading *ngIf="wait" margin="40px 0"></app-loading>
+    <app-loading *ngIf="wait"></app-loading>
     <ng-container *ngIf="!wait">
         <div *ngFor="let locationData of locationsData; let i = index">
             <div class="well flex">

@@ -6,7 +6,7 @@ import { WeatherApiService } from "../../services/weather-api/weather-api.servic
 import { getIcon } from "../../helpers/get-icon";
 import { interval } from "rxjs";
 import { Store } from "@ngxs/store";
-import { ButtonActionCompleted, ButtonDefault } from "../../components/button/button.actions";
+import { ButtonActionCompleted, ButtonDefault, ButtonWorking } from "../../components/button/button.actions";
 import Countries from "../../data/countries.json";
 
 @Component({
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
     public ngOnInit(): void {
         this.getInitData();
-        interval(30000).subscribe(async () => this.getInitData());
+        interval(30000).subscribe(() => this.getInitData());
     }
 
     private async getInitData(): Promise<void> {
@@ -54,22 +54,26 @@ export class HomeComponent implements OnInit {
     }
 
     public async addZipCode(): Promise<void> {
-        try {
-            const countryCode: string = Countries.filter((c) => c.name === this.form.value.country)[0].code;
-            const locationData: WeatherData = await this.weatherApiService
-                .getData(this.form.value.zipCode, countryCode)
-                .toPromise();
-            this.localStorageService.addLocation({
-                zipCode: this.form.value.zipCode,
-                countryCode,
-            });
-            locationData.zipCode = this.form.value.zipCode;
-            locationData.countryCode = countryCode;
-            this.locationsData.push(locationData);
-            this.form.reset();
-            this.store.dispatch(new ButtonActionCompleted());
-        } catch (e) {
-            this.store.dispatch(new ButtonDefault());
+        const index: number = Countries.findIndex((c) => c.name === this.form.value.country);
+        if (index !== -1) {
+            try {
+                this.store.dispatch(new ButtonWorking());
+                const countryCode: string = Countries.filter((c) => c.name === this.form.value.country)[0].code;
+                const locationData: WeatherData = await this.weatherApiService
+                    .getData(this.form.value.zipCode, countryCode)
+                    .toPromise();
+                this.localStorageService.addLocation({
+                    zipCode: this.form.value.zipCode,
+                    countryCode,
+                });
+                locationData.zipCode = this.form.value.zipCode;
+                locationData.countryCode = countryCode;
+                this.locationsData.push(locationData);
+                this.form.reset();
+                this.store.dispatch(new ButtonActionCompleted());
+            } catch (e) {
+                this.store.dispatch(new ButtonDefault());
+            }
         }
     }
 

@@ -54,6 +54,6 @@ export class ButtonState {
     @Action(ButtonActionCompleted)
     buttonActionCompleted(ctx: StateContext<ButtonStateEnum>) {
         ctx.setState(ButtonStateEnum.DONE);
-        timer(2000).subscribe((time) => ctx.setState(ButtonStateEnum.DEFAULT));
+        timer(2000).subscribe(() => ctx.setState(ButtonStateEnum.DEFAULT));
     }
 }

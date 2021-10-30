@@ -6,7 +6,6 @@ import { FormGroup } from "@angular/forms";
 })
 export class BoldDirective implements OnInit {
     @Input() public option: string;
-
     @Input() public form: FormGroup;
     @Input() public name: string;
 
@@ -14,9 +13,7 @@ export class BoldDirective implements OnInit {
 
     public ngOnInit() {
         this.setValue(this.form.controls[this.name].value);
-        this.form.controls[this.name].valueChanges.subscribe((val) => {
-            this.setValue(val);
-        });
+        this.form.controls[this.name].valueChanges.subscribe((val) => this.setValue(val));
     }
 
     private setValue(val: string): void {

@@ -1,6 +1,6 @@
-import { Component, HostListener, Input, TemplateRef } from "@angular/core";
+import { Component, Input, TemplateRef } from "@angular/core";
 import { Store } from "@ngxs/store";
-import { ButtonState, ButtonStateEnum, ButtonWorking } from "./button.actions";
+import { ButtonState, ButtonStateEnum } from "./button.actions";
 import { Observable } from "rxjs";
 
 @Component({
@@ -18,12 +18,4 @@ export class ButtonComponent {
     public ButtonStateEnum: typeof ButtonStateEnum = ButtonStateEnum;
 
     constructor(private store: Store) {}
-
-    @HostListener("click")
-    public click(): void {
-        const state: ButtonStateEnum = this.store.selectSnapshot(ButtonState.buttonState);
-        if (state === ButtonStateEnum.DEFAULT) {
-            this.store.dispatch(new ButtonWorking());
-        }
-    }
 }
