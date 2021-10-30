@@ -1,24 +1,27 @@
 import { Injectable } from "@angular/core";
+import { Location } from "../../models/location";
 
 @Injectable({
     providedIn: "root",
 })
 export class LocalStorageService {
-    public addZipCode(zipCode: string): void {
-        const zipCodes: string[] = JSON.parse(localStorage.getItem("zipCodes")) || [];
-        zipCodes.push(zipCode);
-        localStorage.setItem("zipCodes", JSON.stringify(zipCodes));
+    public addLocation(location: Location): void {
+        const locations: Location[] = JSON.parse(localStorage.getItem("locations")) || [];
+        locations.push(location);
+        localStorage.setItem("locations", JSON.stringify(locations));
         return;
     }
 
-    public removeZipCode(zipCode: string): void {
-        let zipCodes: string[] = JSON.parse(localStorage.getItem("zipCodes")) || [];
-        zipCodes = zipCodes.filter((zip) => zip !== zipCode);
-        localStorage.setItem("zipCodes", JSON.stringify(zipCodes));
+    public removeLocation(location: Location): void {
+        let locations: Location[] = JSON.parse(localStorage.getItem("locations")) || [];
+        locations = locations.filter(
+            (l: Location) => l.zipCode !== location.zipCode && l.countryCode !== location.countryCode,
+        );
+        localStorage.setItem("locations", JSON.stringify(locations));
         return;
     }
 
-    public getZipeCodes(): string[] {
-        return JSON.parse(localStorage.getItem("zipCodes")) || [];
+    public getLocations(): Location[] {
+        return JSON.parse(localStorage.getItem("locations")) || [];
     }
 }

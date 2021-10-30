@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
         country: ["", [Validators.required]],
         zipCode: ["", [Validators.required]],
     });
-    public zipCodesData: WeatherData[];
+    public locationsData: WeatherData[];
     public countries: string[] = Countries.map((c) => c.name);
     public getIcon: (zipCodeData: WeatherData) => string = getIcon;
 
@@ -39,12 +39,15 @@ export class HomeComponent implements OnInit {
 
     private async getInitData(): Promise<void> {
         this.wait = true;
-        this.zipCodesData = [];
-        for await (const zipCode of this.localStorageService.getZipeCodes()) {
+        this.locationsData = [];
+        for await (const location of this.localStorageService.getLocations()) {
             try {
-                const zipCodeData: WeatherData = await this.weatherApiService.getData(zipCode, "FR").toPromise();
-                zipCodeData.zipCode = zipCode;
-                this.zipCodesData.push(zipCodeData);
+                const locationData: WeatherData = await this.weatherApiService
+                    .getData(location.zipCode, location.countryCode)
+                    .toPromise();
+                locationData.zipCode = location.zipCode;
+                locationData.countryCode = location.countryCode;
+                this.locationsData.push(locationData);
             } catch (e) {}
         }
         this.wait = false;
@@ -53,12 +56,16 @@ export class HomeComponent implements OnInit {
     public async addZipCode(): Promise<void> {
         try {
             const countryCode: string = Countries.filter((c) => c.name === this.form.value.country)[0].code;
-            const zipCodeData: WeatherData = await this.weatherApiService
+            const locationData: WeatherData = await this.weatherApiService
                 .getData(this.form.value.zipCode, countryCode)
                 .toPromise();
-            this.localStorageService.addZipCode(this.form.value.zipCode);
-            zipCodeData.zipCode = this.form.value.zipCode;
-            this.zipCodesData.push(zipCodeData);
+            this.localStorageService.addLocation({
+                zipCode: this.form.value.zipCode,
+                countryCode,
+            });
+            locationData.zipCode = this.form.value.zipCode;
+            locationData.countryCode = countryCode;
+            this.locationsData.push(locationData);
             this.form.reset();
             this.store.dispatch(new ButtonActionCompleted());
         } catch (e) {
@@ -66,8 +73,11 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    public async removeZipCode(zipCodeData: WeatherData, index: number): Promise<void> {
-        this.localStorageService.removeZipCode(zipCodeData.zipCode);
-        this.zipCodesData.splice(index, 1);
+    public async removeZipCode(locationsData: WeatherData, index: number): Promise<void> {
+        this.localStorageService.removeLocation({
+            countryCode: locationsData.countryCode,
+            zipCode: locationsData.zipCode,
+        });
+        this.locationsData.splice(index, 1);
     }
 }

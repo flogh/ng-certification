@@ -11,15 +11,15 @@ import { getIcon } from "app/helpers/get-icon";
     styleUrls: ["./forecast.component.scss"],
 })
 export class ForecastComponent implements OnInit {
-    public zipCode: string;
     public forecast: Forecast;
     public getIcon: (zipCodeData: WeatherData) => string = getIcon;
 
     constructor(private route: ActivatedRoute, private weatherApiService: WeatherApiService) {}
 
     public async ngOnInit(): Promise<void> {
-        this.zipCode = this.route.snapshot.params.zipCode;
-        this.forecast = await this.weatherApiService.getForecast(this.zipCode).toPromise();
+        const zipCode: string = this.route.snapshot.params.zipCode;
+        const countryCode: string = this.route.snapshot.params.countryCode;
+        this.forecast = await this.weatherApiService.getForecast(zipCode, countryCode).toPromise();
         this.forecast.list.length = 5;
     }
 }

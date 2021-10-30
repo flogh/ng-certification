@@ -5,7 +5,7 @@ import { ForecastComponent } from "./modules/forecast/forecast.component";
 
 const routes: Routes = [
     { path: "", component: HomeComponent },
-    { path: "forecast/:zipCode", component: ForecastComponent },
+    { path: "forecast/:countryCode/:zipCode", component: ForecastComponent },
 ];
 
 @NgModule({

@@ -18,9 +18,9 @@ export class WeatherApiService {
         );
     }
 
-    public getForecast(zipCode: string): Observable<Forecast> {
+    public getForecast(zipCode: string, countryCode: string): Observable<Forecast> {
         return this.http.get<Forecast>(
-            `https://api.openweathermap.org/data/2.5/forecast/daily?zip=${zipCode},FR&units=metric&appid=${this.apiKey}`,
+            `https://api.openweathermap.org/data/2.5/forecast/daily?zip=${zipCode},${countryCode}&units=metric&appid=${this.apiKey}`,
         );
     }
 }

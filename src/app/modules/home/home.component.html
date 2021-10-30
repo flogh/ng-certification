@@ -16,36 +16,36 @@
             [templateDone]="buttonDone"
         ></app-button>
         <ng-template #buttonDefault>
-            <button id="addLocationBtn" class="btn btn-primary" (click)="addZipCode()">Add location</button>
+            <button class="btn btn-primary" (click)="addZipCode()">Add location</button>
         </ng-template>
         <ng-template #buttonWorking>
-            <button id="addingbtn" class="btn btn-warning">Adding...</button>
+            <button class="btn btn-warning">Adding...</button>
         </ng-template>
         <ng-template #buttonDone>
-            <button id="doneBtn" class="btn btn-success">Done</button>
+            <button class="btn btn-success">Done</button>
         </ng-template>
     </div>
     <app-loading *ngIf="wait" margin="40px 0"></app-loading>
     <ng-container *ngIf="!wait">
-        <div *ngFor="let zipCodeData of zipCodesData; let i = index">
+        <div *ngFor="let locationData of locationsData; let i = index">
             <div class="well flex">
                 <div>
-                    <h3>{{ zipCodeData.name }} ({{ zipCodeData.zipCode }})</h3>
-                    <h4>Current conditions: {{ zipCodeData.weather[0].main }}</h4>
+                    <h3>{{ locationData.name }} - {{ locationData.countryCode }} ({{ locationData.zipCode }})</h3>
+                    <h4>Current conditions: {{ locationData.weather[0].main }}</h4>
                     <h4>Temperatures today:</h4>
                     <p>
-                        Current {{ zipCodeData.main.temp }} - Max {{ zipCodeData.main.temp_max }} - Min
-                        {{ zipCodeData.main.temp_min }}
+                        Current {{ locationData.main.temp }} - Max {{ locationData.main.temp_max }} - Min
+                        {{ locationData.main.temp_min }}
                     </p>
                     <p>
-                        <a routerLink="/forecast/{{ zipCodeData.zipCode }}"
-                            >Show 5-day forecast for {{ zipCodeData.name }}</a
+                        <a routerLink="/forecast/{{ locationData.countryCode }}/{{ locationData.zipCode }}"
+                            >Show 5-day forecast for {{ locationData.name }}</a
                         >
                     </p>
                 </div>
                 <div>
-                    <span class="close" (click)="removeZipCode(zipCodeData, i)">×</span>
-                    <img src="https://www.angulartraining.com/images/weather/{{ getIcon(zipCodeData) }}.png" />
+                    <span class="close" (click)="removeZipCode(locationData, i)">×</span>
+                    <img src="https://www.angulartraining.com/images/weather/{{ getIcon(locationData) }}.png" />
                 </div>
             </div>
         </div>
