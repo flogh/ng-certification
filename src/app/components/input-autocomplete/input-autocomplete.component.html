@@ -1,0 +1,23 @@
+<div class="wrapper" [formGroup]="form">
+    <input
+        class="form-control"
+        [formControlName]="name"
+        [placeholder]="placeholder"
+        [type]="type"
+        (blur)="hasFocus = false"
+        (focus)="hasFocus = true"
+    />
+    <div *ngIf="hasFocus" class="autocomplete">
+        <div
+            *ngFor="let option of optionsFiltered"
+            class="option"
+            bold
+            [option]="option"
+            [form]="form"
+            [name]="name"
+            (mousedown)="countrySelected(option)"
+        >
+            {{ option }}
+        </div>
+    </div>
+</div>

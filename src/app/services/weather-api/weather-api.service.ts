@@ -12,9 +12,9 @@ export class WeatherApiService {
 
     constructor(private http: HttpClient) {}
 
-    public getData(zipCode: string): Observable<WeatherData> {
+    public getData(zipCode: string, countryCode: string): Observable<WeatherData> {
         return this.http.get<WeatherData>(
-            `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},FR&units=metric&appid=${this.apiKey}`,
+            `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},${countryCode}&units=metric&appid=${this.apiKey}`,
         );
     }
 
