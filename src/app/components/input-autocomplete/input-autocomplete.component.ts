@@ -24,7 +24,7 @@ export class InputAutocompleteComponent implements OnInit {
         });
     }
 
-    public countrySelected(country: string): void {
-        this.form.controls["country"].setValue(country);
+    public selected(country: string): void {
+        this.form.controls[this.name].setValue(country);
     }
 }
